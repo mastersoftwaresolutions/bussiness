@@ -1,0 +1,36 @@
+extends layout
+
+block content
+
+  form#formSearch(name="searchproject",method="post",action="/searchproject")
+    body
+    .main
+        .header-main
+        .middle-main
+          .search
+            h4
+              span.biddle-glob
+                p B
+                | iddle
+            .search-dtm
+              .search-ipt
+                
+                input#txtKeyWords(type="text", placeholder="Enter keywords", name="txtKeyWords")
+                input#hdKeyId(type="hidden", name="hdKeyId")  
+                .auto-sgst
+                  ul
+                    li
+                      p Lorem ipsum dolor 
+                      | sit amet, consectetuer adipiscing elit,
+                    li Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
+                    li Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
+                    li Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
+                    li Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
+              button.search-btn#btnSearch(type="submit") Search
+              p.abslt
+                | (find your project here, enter project keywords eg, ecommerce, paypal)
+          .logo
+            img(src='images/m.png')
+        .footer
+          p
+            | Developed by Master Software Solutions

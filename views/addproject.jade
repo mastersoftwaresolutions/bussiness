@@ -1,0 +1,25 @@
+extends layout
+
+block content
+    h1= title
+    form#formAddProject(name="newproject",method="post",action="/newproject")
+       p
+        input#txtTitle(type="text", placeholder="title", name="txtTitle")
+       p 
+        input#txtUrl(type="text", placeholder="url", name="txtUrl")
+       p
+        textarea#txtShortDesc(type="text", placeholder="description", name="txtShortDesc")
+       p
+        input#txtKeyWords(type="text", placeholder="key words", name="txtKeyWords")  
+        input#hdKeyId(type="hidden", name="hdKeyId")  
+        a#aNew(href='javascript:void(0)' ) add new keyword 
+        div#divNew(style='display: none;')
+         input#txtNew(type="text")
+         button#btnKeySubmit(type="button") Add
+       p
+        input#txtDeveloper(type="text", placeholder="developer", name="txtDeveloper")   
+        input#hdId(type="hidden", name="hdId")  
+       p
+        input#chkActive(type="checkbox", name="chkActive")
+       p 
+        button#btnSubmit(type="submit") submit
