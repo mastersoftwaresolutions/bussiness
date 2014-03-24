@@ -11,7 +11,7 @@ var path = require('path');
 var qs = require('querystring');
 var mysql = require('mysql');
 
-// New Code
+// database dependencies
 var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/nodetest1');

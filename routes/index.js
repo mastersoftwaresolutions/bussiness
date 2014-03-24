@@ -7,13 +7,16 @@
 var connection = require('../db.js').localConnect();
 connection.connect();
 
+// to render addproject view
 exports.addproject = function(req, res){
   res.render('addproject', { title: 'Add New Project' });
 };
 
+// to save and edit project info
 exports.newproject = function(db) {
     return function(req, res) {
         var datetime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+
         // Get our form values. These rely on the "name" attributes
         var title = req.body.txtTitle;
         var url = req.body.txtUrl;
@@ -24,7 +27,6 @@ exports.newproject = function(db) {
         var createdDate = datetime;
         var is_Active = req.body.chkActive;
         var _id=req.body.hdnId;
-        console.log('_id',_id);
 
         // add new keywords in db 
         var keyList=keys.split(',');
@@ -45,6 +47,7 @@ exports.newproject = function(db) {
 
         // Set our collection
         var collection = db.get('newproject');
+        // for new project
         if(_id =="0"){
         collection.insert({
             "TITLE" : title,
@@ -65,8 +68,10 @@ exports.newproject = function(db) {
             }
         });
     }
+    // to update project
     else
-    {
+    {   
+        // Set our collection
         collection.update({'_id':_id},{$set:{
             "TITLE" : title,
             "URL" : url,
@@ -90,7 +95,7 @@ exports.newproject = function(db) {
     }
 }
     
-
+// autocomplete for developers
 exports.autocomplete = function(db) {
     return function(req, res) {
         // using mysql to get developers list
@@ -103,9 +108,10 @@ exports.autocomplete = function(db) {
     }
 }
 
+// autocomplete for keywords with add new words
 exports.keyautocomplete = function(db) {
     return function(req, res) {
-        var key=req.query.q;
+        var key=req.query.q; // get query string
         var collection = db.get('keywords');
         collection.find({
             "name" :  new RegExp(key)
@@ -120,6 +126,7 @@ exports.keyautocomplete = function(db) {
                 res.json(doc);
             }
             else{
+                //to add keyword if not exists in db
                 res.json([{'id':'1','name':key}]);
             }
             }
@@ -128,10 +135,10 @@ exports.keyautocomplete = function(db) {
     }
 }
 
+// autocomplete for searchkeywords only for existing
 exports.searchautocomplete = function(db) {
     return function(req, res) {
-        var key=req.query.q;
-        console.log('search',key);
+        var key=req.query.q; // get querystring
         var collection = db.get('keywords');
         collection.find({
             "name" :  new RegExp(key)
@@ -148,32 +155,34 @@ exports.searchautocomplete = function(db) {
     }
 }
 
+// to rendre search view
 exports.search = function(req, res){
   res.render('search', { title: '' });
 };
 
+// to call projectlist page
 exports.searchproject = function(db) {
     return function(req, res) {
+    // get params by name
      res.location("projectlist?key="+req.body.hdKeyId);
      res.redirect("projectlist?key="+req.body.hdKeyId);
     };
 }
 
+// to render projectlist page 
 exports.projectlist = function(db) {
     return function(req, res) {
-        var key=req.query.key;
-        
-        console.log('keys',key)
+        var key=req.query.key; // get querystring
         if(key=="undefined"){
          res.render('projectlist', {
             "projectlist" : docs,"msg":"No Project Found."
-        });
+            });
         }
         else{
         var collection = db.get('newproject');
         collection.find({$query: {
             KEYS: new RegExp(key)
-        }, $orderby: { CREATEDDATE : -1 } },function(e,docs){
+        }, $orderby: { CREATEDDATE : -1 } },function(e,docs){ // for desc order
             if(docs.length>0){
             res.render('projectlist', {
                 "projectlist" : docs,"msg":""
@@ -182,19 +191,19 @@ exports.projectlist = function(db) {
         else{
             res.render('projectlist', {
             "projectlist" : docs,"msg":"No Project Found."
-        });
-        }
+                });
+            }
         });    
-    }
+      }
     };
     
 };
 
-
+// to delete project from list page
 exports.deleteproject=function(db)
 {
     return function(req,res){
-    var id=req.query.key;
+    var id=req.query.key; // get querystring
 
     var collection=db.get('newproject');
     collection.remove({'_id':id
@@ -208,6 +217,7 @@ exports.deleteproject=function(db)
     };
 };
 
+// to render edit project view
 exports.editproject=function(req, res)
 {
   //  res.json('done');

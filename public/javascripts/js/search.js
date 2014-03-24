@@ -1,7 +1,7 @@
 $(function(){
 	$("#btnSearch").click(function(){
 
-		var selectedKeyValues = $('#txtKeyWords').tokenInput("get");
+		var selectedKeyValues = $('#txtKeyWords').tokenInput("get"); // get entered keywords
 		$("#hdKeyId").val("");		  
 		   $.each(selectedKeyValues, function (i, item) {
             if ($("#hdKeyId").val() == "") {
@@ -14,6 +14,7 @@ $(function(){
 		
 	});
 
+    // call delete api 
     $('#btnDelete').click(function(){
         $.ajax({
                     url:"/deleteproject?key="+$(this).attr('class'),
