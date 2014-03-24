@@ -12,34 +12,42 @@ block content
               | iddle
           .search-result
             .search-hvr-tct
-              input.search-txt(placeholder='Search your projects', type='text')
-              .auto-sgst
-                ul
-                  li
-                    p Lorem ipsum dolor 
-                    | sit amet, consectetuer adipiscing elit,
-                  li Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
-                  li Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
-                  li Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
-                  li Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
-            button.search-btn  Search
+              input#txtKeyWord(placeholder='Search your projects', type='text')
+              input#hdKeyId(type="hidden", name="hdKeyId")  
+            button.search-btn#btnSearch(type="submit") Search
       .middle-main
         .projects
          .search-info-t
          .flds-search
-          each pro, i in projectlist
+          -var data=msg;
+          -if(data!="")
+              h4=msg
+           each pro, i in projectlist
 
-            .search-cntnt            
-              h4=  pro.TITLE
-              a(href=pro.URL target="_blank")= pro.URL
-              p=pro.DESC               
-              ul.tag
-                li
-                  a(href='javascript:void(0);')=  pro.KEYS                
-              a.copy(title='Copy', href='javascript:void(0);')
-              .posted-dt
-                i= pro.CREATEDDATE
-                em= pro.DEVELOPER
+              .search-cntnt          
+                h4=  pro.TITLE
+                a(href="http://#{pro.URL}" target="_blank")= pro.URL
+                p#pSub=pro.DESC 
+                a#aNew(href='javascript:void(0)' style='display:none;color:#7EA0FA') View More 
+                .line          
+                p#pFull(style="display:none")=pro.DESC
+                a#aHide(href='javascript:void(0)' style='display:none;color:#7EA0FA') Hide 
+                .line
+                ul.tag
+                  li                  
+                    -var key=pro.KEYS.split(',')    
+                    a(href='/projectlist?key='+k)=  pro.KEYS                
+                a.copy(title='Copy', href='javascript:void(0);')
+                .posted-dt
+                  i Posted On :                                
+                  i= pro.CREATEDDATE                
+                  
+                  em Posted By :              
+                  i= pro.DEVELOPER 
+                  .line
+                  a(href="/edit?key="+pro._id) Edit
+                  | &nbsp;
+                  a#btnDelete(href="javascript:void(0)" class=pro._id) Delete
       .footer
         p Developed by Master Software Solutions 
 

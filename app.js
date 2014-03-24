@@ -9,6 +9,7 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var qs = require('querystring');
+var mysql = require('mysql');
 
 // New Code
 var mongo = require('mongodb');
@@ -18,7 +19,7 @@ var db = monk('localhost:27017/nodetest1');
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3002);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -35,23 +36,32 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-
-app.get('/', routes.index);
-app.get('/users', user.list);
-app.get('/userlist', routes.userlist(db));
-app.get('/newuser', routes.newuser);
-app.post('/adduser', routes.adduser(db));
+var connection = require('./db.js').localConnect();
+connection.connect();
+//default route
+app.get('/', routes.search);
+// to save new project
 app.post('/newproject', routes.newproject(db));
-
-app.get('/login', routes.login);
-app.post('/checklogin', routes.checklogin(db));
+// to view new project ui
 app.get('/addproject', routes.addproject);
+// autocomple for developer
 app.get('/autocomplete', routes.autocomplete(db));
+// autocomplete for keyword with adding new keyword
 app.get('/keyautocomplete', routes.keyautocomplete(db));
+// autocomplete for srach without adding enw keyword
+app.get('/searchautocomplete', routes.searchautocomplete(db));
+// to view sarch page ui
 app.get('/search', routes.search);
+// to redirect on projectlist page
 app.post('/searchproject', routes.searchproject(db));
+//to view projectlist page  ui
 app.get('/projectlist', routes.projectlist(db));
-app.post('/newkeyword', routes.newkeyword(db));
+// to delete project 
+app.post('/deleteproject', routes.deleteproject(db));
+// to edit project ui
+app.get('/editproject', routes.editproject);
+// to edit project
+app.get('/edit', routes.edit(db));
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

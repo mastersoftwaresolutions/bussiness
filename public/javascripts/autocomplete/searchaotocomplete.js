@@ -1,5 +1,5 @@
 $(function(){
-	$("#txtSearch").tokenInput('/searchautocomplete', {
+	$("#txtKeyWord").tokenInput('/searchautocomplete', {
             theme: "facebook",
             hintText:"",
             onResult: function (results) {   
